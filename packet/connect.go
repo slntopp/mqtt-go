@@ -210,7 +210,8 @@ func readConnectPayload(r io.Reader, len int) (ConnectPayload, error) {
 	// Client Identifier, Will Topic, Will Message, User Name, Password
 
 	// TODO am besten so viel einlesen wie moeglich, und dann reslicen / reader zusammenstecken
-
+	fmt.Println("payloadBytes", payloadBytes)
+	fmt.Println("payloadBytes_string", string(payloadBytes))
 	clientIDLengthBytes := payloadBytes[:2]
 	//clientIDLength := int(clientIDLengthBytes[0])
 	//clientID := string(payloadBytes[1 : 1+clientIDLength])
