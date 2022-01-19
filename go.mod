@@ -1,4 +1,4 @@
-module github.com/infinimesh/mqtt-go
+module github.com/slntopp/mqtt-go
 
 require (
 	github.com/davecgh/go-spew v1.1.0 // indirect
