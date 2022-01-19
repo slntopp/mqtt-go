@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/infinimesh/mqtt-go/packet"
+	"github.com/slntopp/mqtt-go/packet"
 )
 
 //openssl req  -nodes -new -x509  -keyout server.key -out server.cert

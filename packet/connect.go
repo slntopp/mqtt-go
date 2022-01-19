@@ -59,6 +59,8 @@ type ConnectVariableHeader struct {
 
 type ConnectPayload struct {
 	ClientID string
+	Username string
+	Password string
 }
 
 func getConnectVariableHeader(r io.Reader) (hdr ConnectVariableHeader, len int, err error) {
@@ -191,7 +193,7 @@ func readConnectProperties(r io.Reader, hdr ConnectVariableHeader) (ConnectVaria
 	return hdr, nil
 }
 
-func readConnectPayload(r io.Reader, len int) (ConnectPayload, error) {
+func readConnectPayload(r io.Reader, len int) (res ConnectPayload, err error) {
 	payloadBytes := make([]byte, len)
 	n, err := io.ReadFull(r, payloadBytes)
 	// TODO set upper limit for payload
@@ -207,18 +209,41 @@ func readConnectPayload(r io.Reader, len int) (ConnectPayload, error) {
 	// REGEX 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
 	// MAY allow more than that, but this must be possible
 
-	// Client Identifier, Will Topic, Will Message, User Name, Password
+	// Client Identifier, Username, Password
 
 	// TODO am besten so viel einlesen wie moeglich, und dann reslicen / reader zusammenstecken
-	fmt.Println("payloadBytes", payloadBytes)
-	fmt.Println("payloadBytes_string", string(payloadBytes))
-	clientIDLengthBytes := payloadBytes[:2]
-	//clientIDLength := int(clientIDLengthBytes[0])
-	//clientID := string(payloadBytes[1 : 1+clientIDLength])
-	clientIDLength := int(binary.BigEndian.Uint16(clientIDLengthBytes))
-	clientID := string(payloadBytes[2 : 2+clientIDLength])
-	return ConnectPayload{
-		ClientID: clientID,
-	}, nil
+	curr := 0
+	next := curr + 2
+	lenBytes := payloadBytes[curr : next]
+	curr = next
+	next = curr + int(binary.BigEndian.Uint16(lenBytes))
+	clientID := string(payloadBytes[curr : next])
 
+	res = ConnectPayload{ClientID: clientID}
+	if n <= next {
+		return res, nil
+	}
+
+	curr = next
+	next = curr + 2
+	lenBytes = payloadBytes[curr : next]
+	curr = next
+	next = curr + int(binary.BigEndian.Uint16(lenBytes))
+	username := string(payloadBytes[curr : next])
+
+	res.Username = username
+	if n <= next {
+		return res, nil
+	}
+
+	curr = next
+	next = curr + 2
+	lenBytes = payloadBytes[curr : next]
+	curr = next
+	next = curr + int(binary.BigEndian.Uint16(lenBytes))
+	password := string(payloadBytes[curr : next])
+
+	res.Password = password
+
+	return res, nil
 }
