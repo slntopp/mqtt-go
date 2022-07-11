@@ -39,9 +39,9 @@ type ConnAckVariableHeader struct {
 
 func (p *ConnAckControlPacket) WriteTo(w io.Writer) (n int64, err error) {
 	if len(p.VariableHeader.ConnAckProperties.AssignedClientID) > 0 {
-		p.FixedHeader.RemainingLength = 3 + len(p.VariableHeader.ConnAckProperties.AssignedClientID) + 3
+		p.FixedHeader.RemainingLength = 2 + len(p.VariableHeader.ConnAckProperties.AssignedClientID) + 3
 	} else {
-		p.FixedHeader.RemainingLength = 3
+		p.FixedHeader.RemainingLength = 2
 	}
 	var nWritten int64
 	nWritten, err = p.FixedHeader.WriteTo(w)
