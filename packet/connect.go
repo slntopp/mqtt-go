@@ -1,20 +1,18 @@
-//--------------------------------------------------------------------------
-// Copyright 2018 infinimesh, INC
-// www.infinimesh.io
-//
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
-//
-//       http://www.apache.org/licenses/LICENSE-2.0
-//
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License.
-//--------------------------------------------------------------------------
+/*
+Copyright © 2021-2022 Infinite Devices GmbH
 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package packet
 
 import (
@@ -214,10 +212,10 @@ func readConnectPayload(r io.Reader, len int) (res ConnectPayload, err error) {
 	// TODO am besten so viel einlesen wie moeglich, und dann reslicen / reader zusammenstecken
 	curr := 0
 	next := curr + 2
-	lenBytes := payloadBytes[curr : next]
+	lenBytes := payloadBytes[curr:next]
 	curr = next
 	next = curr + int(binary.BigEndian.Uint16(lenBytes))
-	clientID := string(payloadBytes[curr : next])
+	clientID := string(payloadBytes[curr:next])
 
 	res = ConnectPayload{ClientID: clientID}
 	if n <= next {
@@ -226,10 +224,10 @@ func readConnectPayload(r io.Reader, len int) (res ConnectPayload, err error) {
 
 	curr = next
 	next = curr + 2
-	lenBytes = payloadBytes[curr : next]
+	lenBytes = payloadBytes[curr:next]
 	curr = next
 	next = curr + int(binary.BigEndian.Uint16(lenBytes))
-	username := string(payloadBytes[curr : next])
+	username := string(payloadBytes[curr:next])
 
 	res.Username = username
 	if n <= next {
@@ -238,10 +236,10 @@ func readConnectPayload(r io.Reader, len int) (res ConnectPayload, err error) {
 
 	curr = next
 	next = curr + 2
-	lenBytes = payloadBytes[curr : next]
+	lenBytes = payloadBytes[curr:next]
 	curr = next
 	next = curr + int(binary.BigEndian.Uint16(lenBytes))
-	password := string(payloadBytes[curr : next])
+	password := string(payloadBytes[curr:next])
 
 	res.Password = password
 
