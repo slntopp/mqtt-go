@@ -94,11 +94,10 @@ func getProtocolName(r io.Reader) (protocolName string, len int, err error) {
 	n, err := r.Read(protocolNameLengthBytes)
 	len += n
 	if err != nil {
-		return "", len, errors.New("Failed to read length of protocolNameLengthBytes")
+		return "", len, errors.New("failed to read length of protocolNameLengthBytes")
 	}
 	if n != 2 {
-
-		return "", len, errors.New("Failed to read length of protocolNameLengthBytes, not enough bytes")
+		return "", len, errors.New("failed to read length of protocolNameLengthBytes, not enough bytes")
 	}
 
 	protocolNameLength := binary.BigEndian.Uint16(protocolNameLengthBytes)
@@ -116,15 +115,15 @@ func getProtocolName(r io.Reader) (protocolName string, len int, err error) {
 	return string(protocolNameBuffer), len, nil
 }
 
-func getProtocolLevel(r io.Reader) (protocolLevel byte, len int, err error) {
-	// Get Proto level
-	protocolLevelBytes := make([]byte, 1)
-	len, err = r.Read(protocolLevelBytes)
-	if err != nil {
-		return protocolLevelBytes[0], len, err
-	}
-	return protocolLevelBytes[0], len, nil
-}
+// func getProtocolLevel(r io.Reader) (protocolLevel byte, len int, err error) {
+// 	// Get Proto level
+// 	protocolLevelBytes := make([]byte, 1)
+// 	len, err = r.Read(protocolLevelBytes)
+// 	if err != nil {
+// 		return protocolLevelBytes[0], len, err
+// 	}
+// 	return protocolLevelBytes[0], len, nil
+// }
 
 func getFixedHeader(r io.Reader) (fh FixedHeader, err error) {
 	buf := make([]byte, 1)
@@ -133,7 +132,7 @@ func getFixedHeader(r io.Reader) (fh FixedHeader, err error) {
 		return FixedHeader{}, err
 	}
 	if n != 1 {
-		return FixedHeader{}, errors.New("Failed to read MQTT Packet Control Type from Client Stream")
+		return FixedHeader{}, errors.New("failed to read MQTT Packet Control Type from Client Stream")
 	}
 	fh.ControlPacketType = ControlPacketType(buf[0] >> 4)
 	fh.Flags = buf[0] & 15
@@ -248,9 +247,9 @@ func parseToConcretePacket(remainingReader io.Reader, fh FixedHeader, protocolLe
 		}
 		return packet, nil
 	case DISCONNECT:
-		return nil, errors.New("Client disconnected")
+		return nil, errors.New("client disconnected")
 	default:
-		return nil, fmt.Errorf("Unknown control packet type: %v", fh.ControlPacketType)
+		return nil, fmt.Errorf("unknown control packet type: %v", fh.ControlPacketType)
 	}
 
 }
@@ -270,7 +269,7 @@ func getRemainingLength(r io.Reader) (remaining int, err error) {
 			return remaining, err
 		}
 		if n != 1 {
-			return 0, errors.New("Failed to get rem len")
+			return 0, errors.New("failed to get rem len")
 		}
 
 		multiplier *= 128
@@ -329,7 +328,7 @@ func readUint16(r io.Reader) (result int, err error) {
 		return
 	}
 	if n != 2 {
-		return n, errors.New("Couldnt read required 2 bytes for string length")
+		return n, errors.New("couldnt read required 2 bytes for string length")
 	}
 	return int(binary.BigEndian.Uint16(buf)), nil
 }

@@ -85,7 +85,7 @@ func readUnsubscribeProperties(r io.Reader, vh UnsubscribeVariableHeader) (Unsub
 		return vh, err
 	}
 	if propertiesLength != vh.UnsubscribeProperties.PropertyLength {
-		return vh, errors.New("Unsubscribe Properties length incorrect")
+		return vh, errors.New("unsubscribe Properties length incorrect")
 	}
 	for propertiesLength > 1 {
 		if unSubscribeProperties[0] == USER_PROPERTY_ID {
@@ -134,11 +134,11 @@ func readUnsubscribePayload(r io.Reader, remainingLength int) (n int, payload Un
 		unSub.Topic = string(topic)
 
 		if qos[0]&252 > 0 {
-			return n, UnsubscribePayload{}, errors.New("Invalid Unsubscribe payload. Reserved bits of QoS are non-zero")
+			return n, UnsubscribePayload{}, errors.New("invalid Unsubscribe payload. Reserved bits of QoS are non-zero")
 		}
 
 		if qos[0]&1 > 0 && qos[0]&2 > 0 {
-			return n, UnsubscribePayload{}, errors.New("Invalid QoS level in payload. It is not allowed to set both bits")
+			return n, UnsubscribePayload{}, errors.New("invalid QoS level in payload. It is not allowed to set both bits")
 		}
 
 		if qos[0]&1 > 0 {

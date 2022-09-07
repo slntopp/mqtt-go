@@ -71,7 +71,7 @@ func getConnectVariableHeader(r io.Reader) (hdr ConnectVariableHeader, len int, 
 	hdr.ProtocolName = protocolName
 
 	if hdr.ProtocolName != "MQTT" && hdr.ProtocolName != "MQIsdp" {
-		return hdr, 0, fmt.Errorf("Invalid protocol: %v", hdr.ProtocolName)
+		return hdr, 0, fmt.Errorf("invalid protocol: %v", hdr.ProtocolName)
 	}
 
 	// Get Proto level
@@ -87,7 +87,7 @@ func getConnectVariableHeader(r io.Reader) (hdr ConnectVariableHeader, len int, 
 	connectFlagsByte := make([]byte, 1)
 	n, err = r.Read(connectFlagsByte)
 	if n != 1 {
-		return hdr, len, errors.New("Failed to read flags byte")
+		return hdr, len, errors.New("failed to read flags byte")
 	}
 	len += n
 	if err != nil {
@@ -104,10 +104,10 @@ func getConnectVariableHeader(r io.Reader) (hdr ConnectVariableHeader, len int, 
 	n, err = r.Read(keepAliveByte)
 	len += n
 	if err != nil {
-		return hdr, len, errors.New("Could not read keepalive byte")
+		return hdr, len, errors.New("could not read keepalive byte")
 	}
 	if n != 2 {
-		return hdr, len, errors.New("Could not read enough keepalive bytes")
+		return hdr, len, errors.New("could not read enough keepalive bytes")
 	}
 
 	hdr.KeepAlive = int(binary.BigEndian.Uint16(keepAliveByte))
@@ -127,7 +127,7 @@ func getConnectVariableHeader(r io.Reader) (hdr ConnectVariableHeader, len int, 
 		n, err = r.Read(propertiesLength)
 		len += n
 		if err != nil {
-			return hdr, len, errors.New("Could not read properties length")
+			return hdr, len, errors.New("could not read properties length")
 		}
 		hdr.ConnectProperties.PropertyLength = int(propertiesLength[0])
 		if hdr.ConnectProperties.PropertyLength > 0 {
@@ -145,7 +145,7 @@ func readConnectProperties(r io.Reader, hdr ConnectVariableHeader) (ConnectVaria
 		return hdr, err
 	}
 	if propertiesLength != hdr.ConnectProperties.PropertyLength {
-		return hdr, errors.New("Connect Properties length incorrect")
+		return hdr, errors.New("connect Properties length incorrect")
 	}
 	for propertiesLength > 1 {
 		connectPropertyID := int(connectProperties[0])
@@ -196,7 +196,7 @@ func readConnectPayload(r io.Reader, len int) (res ConnectPayload, err error) {
 		return ConnectPayload{}, err
 	}
 	if n != len {
-		return ConnectPayload{}, errors.New("Payload length incorrect")
+		return ConnectPayload{}, errors.New("payload length incorrect")
 	}
 
 	// CONNECT MUST have the client id

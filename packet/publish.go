@@ -58,7 +58,7 @@ func interpretPublishHeaderFlags(header byte) (flags PublishHeaderFlags, err err
 	flags.Dup = header&8 > 0
 
 	if header&2 > 0 && header&4 > 0 {
-		err = errors.New("Both bits for QoS are set, this is invalid")
+		err = errors.New("both bits for QoS are set, this is invalid")
 	}
 
 	if header&2 > 0 {
@@ -117,7 +117,7 @@ func readPublishProperties(r io.Reader, vh PublishVariableHeader) (PublishVariab
 		return vh, err
 	}
 	if propertiesLength != vh.PublishProperties.PropertyLength {
-		return vh, errors.New("Connect Properties length incorrect")
+		return vh, errors.New("connect Properties length incorrect")
 	}
 	for propertiesLength > 1 {
 		if propertiesLength > 1 && int(publishProperties[0]) == TOPIC_ALIAS_MAXIMUM_ID {

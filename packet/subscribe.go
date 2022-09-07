@@ -83,7 +83,7 @@ func readSubscribeProperties(r io.Reader, vh SubscribeVariableHeader) (Subscribe
 		return vh, err
 	}
 	if propertiesLength != vh.SubscribeProperties.PropertyLength {
-		return vh, errors.New("Subscribe Properties length incorrect")
+		return vh, errors.New("subscribe properties length incorrect")
 	}
 	for propertiesLength > 1 {
 		if subscribeProperties[0] == USER_PROPERTY_ID {
@@ -132,11 +132,11 @@ func readSubscribePayload(r io.Reader, remainingLength int) (n int, payload Subs
 		sub.Topic = string(topic)
 
 		if qos[0]&252 > 0 {
-			return n, SubscribePayload{}, errors.New("Invalid Subscribe payload. Reserved bits of QoS are non-zero")
+			return n, SubscribePayload{}, errors.New("invalid Subscribe payload. Reserved bits of QoS are non-zero")
 		}
 
 		if qos[0]&1 > 0 && qos[0]&2 > 0 {
-			return n, SubscribePayload{}, errors.New("Invalid QoS level in payload. It is not allowed to set both bits")
+			return n, SubscribePayload{}, errors.New("invalid QoS level in payload. It is not allowed to set both bits")
 		}
 
 		if qos[0]&1 > 0 {

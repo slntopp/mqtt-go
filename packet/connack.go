@@ -86,7 +86,6 @@ func (c *ConnAckVariableHeader) WriteTo(w io.Writer) (n int64, err error) {
 		if err != nil {
 			return
 		}
-		buf = make([]byte, len(c.ConnAckProperties.AssignedClientID))
 		buf = []byte(c.ConnAckProperties.AssignedClientID)
 		bytesWritten, err = w.Write(buf)
 		n += int64(bytesWritten)
