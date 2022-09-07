@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@ import (
 	"io"
 )
 
-type PubackControlPacket struct {
+type PubAckControlPacket struct {
 	FixedHeader    FixedHeader
 	VariableHeader PubAckVariableHeader
 }
@@ -41,12 +41,12 @@ func (vh *PubAckVariableHeader) WriteTo(w io.Writer) (n int64, err error) {
 	return
 }
 
-func (p *PubackControlPacket) WriteTo(w io.Writer) (n int64, err error) {
+func (p *PubAckControlPacket) WriteTo(w io.Writer) (n int64, err error) {
 	return p.VariableHeader.WriteTo(w)
 }
 
-func NewPubAckControlPacket(packetID uint16) *PubackControlPacket {
-	return &PubackControlPacket{
+func NewPubAckControlPacket(packetID uint16) *PubAckControlPacket {
+	return &PubAckControlPacket{
 		FixedHeader: FixedHeader{
 			ControlPacketType: PUBACK,
 			RemainingLength:   2,

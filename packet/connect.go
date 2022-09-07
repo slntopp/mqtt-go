@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -121,7 +121,6 @@ func getConnectVariableHeader(r io.Reader) (hdr ConnectVariableHeader, len int, 
 		hdr.ConnectFlags.WillQoS = 1
 	}
 
-	fmt.Printf("ProtoLevel %v, %v\n", hdr.ProtocolLevel, int(hdr.ProtocolLevel))
 	if int(hdr.ProtocolLevel) == 5 {
 		//reading variable header properties length
 		propertiesLength := make([]byte, 1)
@@ -131,9 +130,7 @@ func getConnectVariableHeader(r io.Reader) (hdr ConnectVariableHeader, len int, 
 			return hdr, len, errors.New("Could not read properties length")
 		}
 		hdr.ConnectProperties.PropertyLength = int(propertiesLength[0])
-		if hdr.ConnectProperties.PropertyLength == 0 {
-			fmt.Printf("No optional properties added")
-		} else {
+		if hdr.ConnectProperties.PropertyLength > 0 {
 			len += hdr.ConnectProperties.PropertyLength
 			hdr, _ = readConnectProperties(r, hdr)
 		}
@@ -183,7 +180,6 @@ func readConnectProperties(r io.Reader, hdr ConnectVariableHeader) (ConnectVaria
 			connectProperties = connectProperties[REQUEST_PROBLEM_INFORMATION_LENGTH:propertiesLength]
 			propertiesLength -= REQUEST_PROBLEM_INFORMATION_LENGTH + 1
 		} else {
-			fmt.Printf("%v Connect Property is not supported yet..", connectProperties[0])
 			propertiesLength = 0
 		}
 	}

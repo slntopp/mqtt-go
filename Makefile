@@ -1,3 +1,0 @@
-test:
-	go test -cover -v ./...
-lint:

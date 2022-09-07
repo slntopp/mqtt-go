@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
-	"fmt"
 	"io"
 )
 
@@ -103,9 +102,7 @@ func readPublishVariableHeader(r io.Reader, flags PublishHeaderFlags, protoLevel
 			return
 		}
 		vh.PublishProperties.PropertyLength = int(propertyLength[0])
-		if vh.PublishProperties.PropertyLength == 0 {
-			fmt.Printf("No optional publish properties added")
-		} else {
+		if vh.PublishProperties.PropertyLength >= 0 {
 			len += vh.PublishProperties.PropertyLength
 			vh, _ = readPublishProperties(r, vh)
 		}
@@ -148,18 +145,15 @@ func readPublishProperties(r io.Reader, vh PublishVariableHeader) (PublishVariab
 
 			vh.PublishProperties.UserProperty.key = string(publishProperties[0:userPropertyKeyLength])
 			publishProperties = publishProperties[userPropertyKeyLength:]
-			fmt.Printf("pubProp key: %v", vh.PublishProperties.UserProperty.key)
 
 			userPropertyValueLength := int(binary.BigEndian.Uint16(publishProperties[0:2]))
 			publishProperties = publishProperties[2:]
 
 			vh.PublishProperties.UserProperty.value = string(publishProperties[0:userPropertyValueLength])
 			publishProperties = publishProperties[userPropertyValueLength:]
-			fmt.Printf("pubProp value: %v", vh.PublishProperties.UserProperty.value)
 			propertiesLength -= (4 + userPropertyKeyLength + userPropertyValueLength)
 		}
 		propertiesLength = 0
-		fmt.Printf("No additional Publish Properties added or supported")
 	}
 	return vh, nil
 }

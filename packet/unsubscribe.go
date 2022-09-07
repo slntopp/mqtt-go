@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,6 @@ package packet
 import (
 	"encoding/binary"
 	"errors"
-	"fmt"
 	"io"
 )
 
@@ -71,9 +70,7 @@ func readUnsubscribeVariableHeader(r io.Reader, protocolLevel byte) (n int, vh U
 			return
 		}
 		vh.UnsubscribeProperties.PropertyLength = int(propertyLength[0])
-		if vh.UnsubscribeProperties.PropertyLength == 0 {
-			fmt.Printf("No optional unsubscribe properties added")
-		} else {
+		if vh.UnsubscribeProperties.PropertyLength >= 0 {
 			len += vh.UnsubscribeProperties.PropertyLength
 			vh, _ = readUnsubscribeProperties(r, vh)
 		}
@@ -106,7 +103,6 @@ func readUnsubscribeProperties(r io.Reader, vh UnsubscribeVariableHeader) (Unsub
 			unSubscribeProperties = unSubscribeProperties[userPropertyValueLength:]
 		} else {
 			propertiesLength = 0
-			fmt.Printf("No additional Unsubscribe properties added or supported")
 		}
 	}
 	return vh, nil

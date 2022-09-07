@@ -200,7 +200,6 @@ func parseToConcretePacket(remainingReader io.Reader, fh FixedHeader, protocolLe
 		}
 
 		payload, err := readPublishPayload(remainingReader, fh.RemainingLength-vhLength)
-		fmt.Printf("Publish payload :%v\n", payload)
 		if err != nil {
 			return nil, err
 		}
@@ -247,10 +246,8 @@ func parseToConcretePacket(remainingReader io.Reader, fh FixedHeader, protocolLe
 			VariableHeader: vh,
 			Payload:        payload,
 		}
-		fmt.Printf("Client has unsubscribed %v", fh.ControlPacketType)
 		return packet, nil
 	case DISCONNECT:
-		fmt.Println("Client disconnected")
 		return nil, errors.New("Client disconnected")
 	default:
 		return nil, fmt.Errorf("Unknown control packet type: %v", fh.ControlPacketType)
